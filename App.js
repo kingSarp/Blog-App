@@ -1,22 +1,37 @@
 // import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { Feather, EvilIcons } from "@expo/vector-icons";
+
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import IndexScreen from "./src/screens/IndexScreen";
-import { BlogProvider } from "./src/context/BlogContext";
-
+import { Provider } from "./src/context/BlogContext";
+import ShowScreen from "./src/screens/ShowScreen";
+import CreateScreen from "./src/screens/CreateScreen";
 
 const Stack = createNativeStackNavigator();
 
-export default function App( ) {
+export default function App() {
   return (
-    <BlogProvider>
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Index" component={IndexScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
-    </BlogProvider>
+    <Provider>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Index"
+            options={({ navigation, route }) => ({
+              headerRight: () => (
+                <TouchableOpacity onPress={() => navigation.navigate("Create")}>
+                  <Feather name="plus" size={30} />
+                </TouchableOpacity>
+              ),
+            })}
+            component={IndexScreen}
+          />
+          <Stack.Screen name="Show" component={ShowScreen} />
+          <Stack.Screen name="Create" component={CreateScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 

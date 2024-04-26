@@ -1,20 +1,27 @@
 import React, { useContext } from "react";
-import {View , Text , StyleSheet} from "react-native";
+import { StyleSheet } from "react-native";
 import { Context } from "../context/BlogContext";
+import BlogPostForm from "../Component/BlogPostForm";
 
-const CreateScreen = ({route}) => {
-    // const {state} = useContext(Context);
-    // const BlogPost = state.find((blogPost) => blogPost.id === route.params.id )
-//    console.log( route.params.id);
-   return(
-    <View>
-        <Text>Create</Text>
-    </View>
-   ) ;
+const CreateScreen = ({ navigation, route }) => {
+  const { addBlogPost } = useContext(Context);
+
+  return (
+    <BlogPostForm
+      onSubmit={(title, content) => {
+        addBlogPost(title, content, () => navigation.navigate("Index"));
+      }}
+    />
+  );
 };
 
-const styles = StyleSheet.create({
+BlogPostForm.defaultProps = {
+  intialValues: {
+    title:"",
+    content:""
+  }
+};
 
-})
+const styles = StyleSheet.create({});
 
 export default CreateScreen;

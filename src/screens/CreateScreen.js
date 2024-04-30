@@ -16,7 +16,7 @@ const CreateScreen = ({ navigation, route }) => {
 };
 
 BlogPostForm.defaultProps = {
-  intialValues: {
+  initialValues: {
     title:"",
     content:""
   }

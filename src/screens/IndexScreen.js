@@ -1,4 +1,4 @@
-import React, { useContext , useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,18 +9,49 @@ import {
 } from "react-native";
 import { Context } from "../context/BlogContext";
 import { Feather, EvilIcons } from "@expo/vector-icons";
+import axios from "axios";
 
 const IndexScreen = ({ navigation }) => {
-  const { state, addBlogPost, deleteBlogPost , getBlogPosts } = useContext(Context);
+  const { state, addBlogPost, deleteBlogPost, getBlogPosts } =
+    useContext(Context);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getBlogPosts();
-    const listener = navigation.addListener("focus", () => getBlogPosts());
+    const focusListener = navigation.addListener("focus", () => {
+      getBlogPosts();
+    });
+
     return () => {
-      listener.remove();
-    }
+      focusListener.remove();
+    };
   }, []);
-  
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("YOUR_API_ENDPOINT");
+        // Handle successful response
+        console.log("Data fetched:", response.data);
+      } catch (error) {
+        // Handle error
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
   return (
     <View>
       <FlatList
@@ -46,7 +77,6 @@ const IndexScreen = ({ navigation }) => {
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   row: {
